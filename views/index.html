@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css"
+    integrity="sha512-HqxHUkJM0SYcbvxUw5P60SzdOTy/QVwA1JJrvaXJv4q7lmbDZCmZaqz01UPOaQveoxfYRv1tHozWGPMcuTBuvQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>STUDENT</title>
+</head>
+
+<body>
+  <table class="table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>ID étudiant</th>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Email validé</th>
+      </tr>
+    </thead>
+    <tbody id="students-table">
+       <!-- Les étudiants seront ajoutés dynamiquement ici  -->
+    </tbody>
+  </table>
+
+  <footer>
+    <button type="button" onclick="location.href='addStudent.html'">Ajouter un étudiant</button>
+    <button type="button" onclick="location.href='updateStudent.html'">Mettre à jour un étudiant</button>
+  </footer>
+
+  <script>
+    // Fonction pour supprimer un étudiant
+    function deleteStudent(button) {
+      const row = button.parentNode.parentNode;
+      const studentID= row.querySelector("td:nth-child(2)").textContent;
+
+      fetch(`/DeleteStudent/${studentId}`, {
+        method: "POST"
+      })
+      .then(response => response.json())
+      .then(data => {
+        // si la suppression a reussi, supprimez la ligne du tableau
+        if (data.success) {
+          row.remove();
+        } else {
+          console.error("une erreur s'est produite lors de la suppression de l'etudiant : ", data.error);
+        }
+      })
+      .catch(error => {
+        console.error("une erreur s'est produite lors de la suppresion de l'etudiant : ", error);
+      })
+    }
+
+    // Fonction pour récupérer les informations des étudiants depuis le serveur
+    function getStudents() {
+      fetch("/students") // Remplacez cette URL par l'URL de votre API pour récupérer les étudiants
+        .then(response => response.json())
+        .then(data => {
+          const tableBody = document.getElementById("students-table");
+
+          data.forEach(student => {
+            const row = document.createElement("tr");
+
+            const deleteForm = document.createElement("td");
+            const deleteButton = document.createElement("input");
+            deleteButton.type = "submit";
+            deleteButton.name = "supprimer";
+            deleteButton.value = "Supprimer";
+            deleteForm.appendChild(deleteButton);
+            row.appendChild(deleteForm);
+
+            const studentId = document.createElement("td");
+            studentId.textContent = student.student_id;
+            row.appendChild(studentId);
+
+            const firstName = document.createElement("td");
+            firstName.textContent = student.first_name;
+            row.appendChild(firstName);
+
+            const lastName = document.createElement("td");
+            lastName.textContent = student.last_name;
+            row.appendChild(lastName);
+
+            const email = document.createElement("td");
+            email.textContent = student.email;
+            row.appendChild(email);
+
+            tableBody.appendChild(row);
+          });
+        })
+        .catch(error => {
+          console.error("Une erreur s'est produite lors de la récupération des données :", error);
+        });
+    }
+
+    // Appeler la fonction pour récupérer les étudiants lors du chargement de la page
+    window.addEventListener("load", getStudents);
+  </script>
+</body>
+
+</html> 

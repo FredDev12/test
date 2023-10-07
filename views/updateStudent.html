@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier un étudiants</title>
+</head>
+
+<body>
+    <form action="/updateStudent" method="POST">
+        <label for="student_id">Entrer l'ID de l'étudiant</label>
+        <input type="text" id="student_id" name="student_id">
+        <br>
+        <label for="first_name">Entrer le prénom</label>
+        <input type="text" id="first_name" name="first_name">
+        <br>
+        <label for="last_name">Entrer le nom</label>
+        <input type="text" id="last_name" name="last_name">
+        <br>
+        <label for="first_name">Email reçu ? </label>
+        <input type="checkbox" id="email" name="email" value="Y" checked>
+        <br>
+        <input type="submit" value="enregistrer">
+    </form>
+</body>
+
+</html>
